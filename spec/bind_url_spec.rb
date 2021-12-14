@@ -4,7 +4,7 @@ RSpec.describe BindUrl do
     expect(BindUrl::VERSION).not_to be nil
   end
 
-  context "normal usage" do
+  context "public access" do
     describe "xxx_url" do
       context "with value present" do
         let(:user) { User.new(photo: "a.jpg") }
@@ -57,6 +57,25 @@ RSpec.describe BindUrl do
       it "should update value" do
         user.photo_file = Tempfile.new(["", ".png"])
         expect(user.photo).to eq("x.png")
+      end
+    end
+  end
+
+  context "private access" do
+    describe "xxx_url" do
+      let(:user) { User.new(private_photo: "a.jpg") }
+
+      it "should return with Signature" do
+        expect(user.private_photo_url.include?("Signature=")).to eq(true)
+      end
+    end
+
+    describe "xxx_file=" do
+      let(:user) { User.new }
+      it "should update file with acl private" do
+        expect_any_instance_of(Aliyun::OSS::Bucket).to receive(:put_object).with(kind_of(String), hash_including(acl: "private"))
+
+        user.private_photo_file = Tempfile.new(["", ".png"])
       end
     end
   end

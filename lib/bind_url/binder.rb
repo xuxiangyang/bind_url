@@ -19,10 +19,14 @@ module BindUrl
       raise "need overwrite"
     end
 
-    def url
+    def url(parameters = {})
       v = model.send(attr)
       return nil unless v
-      File.join(self.class.storage_config.host, File.join(store_dir, v))
+      uri = URI(self.class.oss_bucket.object_url(File.join(store_dir, v).gsub(%r{^/}, ""), self.private, 7200, parameters))
+      host_uri = URI(self.class.storage_config.host)
+      uri.scheme = host_uri.scheme
+      uri.host = host_uri.host
+      uri.to_s
     end
 
     def url=(url)
@@ -36,6 +40,7 @@ module BindUrl
         File.join(store_dir, filename),
         file: file.path,
         content_type: Rack::Mime::MIME_TYPES[extname] || MimeMagic.by_magic(file).type,
+        acl: self.private ? "private" : "default",
       )
       model.send("#{attr}=", filename)
     end

@@ -31,7 +31,7 @@ end
 class User
   extend BindUrl
 
-  attr_accessor :photo, :cert, :other, :pictures
+  attr_accessor :photo, :private_photo, :other, :pictures, :private_pictures, :others
   def initialize(photo: nil, private_photo: nil, other: nil, pictures: [], private_pictures: [], others: [])
     @photo = photo
     @private_photo = private_photo

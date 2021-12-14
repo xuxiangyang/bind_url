@@ -15,7 +15,6 @@ RSpec.configure do |config|
 
 
   config.before(:each) do
-    allow_any_instance_of(Aliyun::OSS::Client).to receive(:get_bucket).and_return(Aliyun::OSS::Bucket.new)
     allow_any_instance_of(Aliyun::OSS::Bucket).to receive(:put_object)
   end
 end
