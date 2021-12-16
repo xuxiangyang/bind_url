@@ -22,6 +22,13 @@ RSpec.describe BindUrl do
         end
       end
 
+      context "url with params" do
+        let(:user) { User.new(photo: "a.jpg") }
+
+        it "should add params to query" do
+          expect(user.photo_url(a: 1)).to eq("https://oss.example.com/User/photo/a.jpg?a=1")
+        end
+      end
 
       context "with value changed" do
         let(:user) { User.new(photo: "a.jpg") }

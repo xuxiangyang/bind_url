@@ -19,9 +19,8 @@ module BindUrl
       raise "need overwrite"
     end
 
-    def url(parameters = {})
-      v = model.send(attr)
-      return nil unless v
+    def gen_url(v, parameters = {})
+      parameters = parameters.map { |k, v| [k.to_s, v.to_s] }.to_h
       uri = URI(self.class.oss_bucket.object_url(File.join(store_dir, v).gsub(%r{^/}, ""), self.private, 7200, parameters))
       host_uri = URI(self.class.storage_config.host)
       uri.scheme = host_uri.scheme
@@ -29,11 +28,11 @@ module BindUrl
       uri.to_s
     end
 
-    def url=(url)
-      self.file = download_as_tmp_file(url)
+    def upload_via_url(url)
+      upload_via_file(download_as_tmp_file(url))
     end
 
-    def file=(file)
+    def upload_via_file(file)
       extname = Pathname.new(file.path).extname
       filename = "#{SecureRandom.uuid.delete('-')}#{extname}"
       self.class.oss_bucket.put_object(
@@ -42,7 +41,7 @@ module BindUrl
         content_type: Rack::Mime::MIME_TYPES[extname] || MimeMagic.by_magic(file).type,
         acl: self.private ? "private" : "default",
       )
-      model.send("#{attr}=", filename)
+      filename
     end
 
     private
