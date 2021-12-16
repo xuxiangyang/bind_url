@@ -1,10 +1,10 @@
 require "bind_url/version"
 require "bind_url/binder"
-require "bind_url/bucket_config"
 require "active_support/all"
 
 module BindUrl
   BindUrlConfig = Struct.new(:binder_class, :private, keyword_init: true)
+  BucketConfig = Struct.new(:endpoint, :access_key_id, :access_key_secret, :bucket, :host, keyword_init: true)
   class Error < StandardError; end
 
   def bind_url(attr, binder_class, private: false)
