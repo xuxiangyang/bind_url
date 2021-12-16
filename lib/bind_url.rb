@@ -10,7 +10,7 @@ module BindUrl
   def bind_url(attr, binder_class, private: false)
     bind_url_configs[attr.to_sym] = BindUrlConfig.new(binder_class: binder_class, private: private)
 
-    self.class_eval <<-RUBY, __FILE__, __LINE__+1
+    self.class_eval <<-RUBY, __FILE__, __LINE__ + 1
       def #{attr}_url(params = {})
         v = self.send(:#{attr})
         return nil unless v
@@ -36,7 +36,7 @@ module BindUrl
     bind_url_configs[attr.to_sym] = BindUrlConfig.new(binder_class: binder_class, private: private)
 
     signle_attr = attr.to_s.singularize.to_sym
-    self.class_eval <<-RUBY, __FILE__, __LINE__+1
+    self.class_eval <<-RUBY, __FILE__, __LINE__ + 1
       def #{signle_attr}_urls(params = {})
         vs = self.send(:#{attr})
         return [] if vs.nil?

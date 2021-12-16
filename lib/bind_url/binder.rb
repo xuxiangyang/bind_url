@@ -20,7 +20,7 @@ module BindUrl
     end
 
     def gen_url(v, parameters = {})
-      parameters = parameters.map { |k, v| [k.to_s, v.to_s] }.to_h
+      parameters = parameters.map { |key, value| [key.to_s, value.to_s] }.to_h
       uri = URI(self.class.oss_bucket.object_url(File.join(store_dir, v).gsub(%r{^/}, ""), self.private, 7200, parameters))
       host_uri = URI(self.class.storage_config.host)
       uri.scheme = host_uri.scheme
