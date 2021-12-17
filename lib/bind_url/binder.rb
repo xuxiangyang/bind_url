@@ -50,7 +50,8 @@ module BindUrl
 
     def download_as_tmp_file(url)
       res = RestClient.get(url)
-      file = Tempfile.new(["", Rack::Mime::MIME_TYPES.invert[res.headers[:content_type]]])
+      ext = Pathname.new(URI(url).path).extname.presence || Rack::Mime::MIME_TYPES.invert[res.headers[:content_type]]
+      file = Tempfile.new(["", ext])
       file.binmode
       file.write(res.body)
       file.flush
