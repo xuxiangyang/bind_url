@@ -1,13 +1,12 @@
 require "bind_url/version"
 require "bind_url/binder"
-require "active_support/all"
 
 module BindUrl
   BindUrlConfig = Struct.new(:binder_class, :private, keyword_init: true)
   BucketConfig = Struct.new(:endpoint, :access_key_id, :access_key_secret, :bucket, :host, keyword_init: true)
   class Error < StandardError; end
 
-  def bind_url(attr, binder_class, private: false)
+  def bind_url(attr, binder_class: BindUrl.default_binder_class, private: false)
     bind_url_configs[attr.to_sym] = BindUrlConfig.new(binder_class: binder_class, private: private)
 
     self.class_eval <<-RUBY, __FILE__, __LINE__ + 1
@@ -32,7 +31,7 @@ module BindUrl
     RUBY
   end
 
-  def bind_urls(attr, binder_class, private: false)
+  def bind_urls(attr, binder_class: BindUrl.default_binder_class, private: false)
     bind_url_configs[attr.to_sym] = BindUrlConfig.new(binder_class: binder_class, private: private)
 
     signle_attr = attr.to_s.singularize.to_sym
@@ -78,11 +77,17 @@ module BindUrl
 
   class << self
     attr_accessor :storage_configs
+    attr_writer :default_binder_class
 
     def configure(storage = :default)
       config = BindUrl::BucketConfig.new
       yield config
       storage_configs[storage] = config
+    end
+
+    def default_binder_class
+      raise "you need overwrite BindUrl.default_binder_class" if @default_binder_class.nil?
+      @default_binder_class
     end
   end
 end

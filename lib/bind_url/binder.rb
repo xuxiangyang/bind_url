@@ -4,6 +4,8 @@ require 'securerandom'
 require 'pathname'
 require 'aliyun/oss'
 require 'rack'
+require "active_support/core_ext/string/inflections"
+
 
 module BindUrl
   class Binder

@@ -20,6 +20,7 @@ class ImageBinder < BindUrl::Binder
     "#{self.model.class}/#{self.attr}"
   end
 end
+BindUrl.default_binder_class = ImageBinder
 
 class OtherBinder < BindUrl::Binder
   storage :other_storage
@@ -41,9 +42,9 @@ class User
     @others = others
   end
 
-  bind_url :photo, ImageBinder
-  bind_url :private_photo, ImageBinder, private: true
-  bind_url :other, OtherBinder
-  bind_urls :pictures, ImageBinder
-  bind_urls :private_pictures, ImageBinder, private: true
+  bind_url :photo
+  bind_url :private_photo, private: true
+  bind_url :other, binder_class: OtherBinder
+  bind_urls :pictures
+  bind_urls :private_pictures, private: true
 end
