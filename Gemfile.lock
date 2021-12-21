@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    bind_url (0.1.2.1)
+    bind_url (0.1.2.2)
       activesupport (>= 4.0)
       aliyun-sdk (> 0.7.0)
       mimemagic (>= 0.3.0)
@@ -40,11 +40,9 @@ GEM
     mimemagic (0.4.3)
       nokogiri (~> 1)
       rake
-    mini_portile2 (2.6.1)
     minitest (5.15.0)
     netrc (0.11.0)
-    nokogiri (1.12.5)
-      mini_portile2 (~> 2.6.1)
+    nokogiri (1.12.5-x86_64-darwin)
       racc (~> 1.4)
     pry (0.14.1)
       coderay (~> 1.1)
