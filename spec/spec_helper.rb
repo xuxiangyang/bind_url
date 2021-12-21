@@ -1,6 +1,7 @@
 require "bundler/setup"
 require "pry"
 require "bind_url"
+require 'rspec-benchmark'
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure
@@ -8,6 +9,8 @@ RSpec.configure do |config|
 
   # Disable RSpec exposing methods globally on `Module` and `main`
   config.disable_monkey_patching!
+
+  config.filter_run_excluding perf: true
 
   config.expect_with :rspec do |c|
     c.syntax = :expect

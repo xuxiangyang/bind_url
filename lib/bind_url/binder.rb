@@ -23,11 +23,8 @@ module BindUrl
 
     def gen_url(v, parameters = {})
       parameters = parameters.map { |key, value| [key.to_s, value.to_s] }.to_h
-      uri = URI(self.class.oss_bucket.object_url(File.join(store_dir, v).gsub(%r{^/}, ""), self.private, 28800, parameters))
-      host_uri = URI(self.class.storage_config.host)
-      uri.scheme = host_uri.scheme
-      uri.host = host_uri.host
-      uri.to_s
+      path = self.class.oss_bucket.object_url(File.join(store_dir, v).delete_prefix('/'), self.private, 28800, parameters).delete_prefix(self.class.oss_bucket.bucket_url.delete_suffix('/'))
+      self.class.storage_config.host.delete_suffix('/') + path
     end
 
     def upload_via_url(url)
