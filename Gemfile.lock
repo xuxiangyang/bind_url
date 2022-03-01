@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    bind_url (0.1.2.2)
+    bind_url (0.1.2.3)
       activesupport (>= 4.0)
       aliyun-sdk (> 0.7.0)
       mimemagic (>= 0.3.0)
