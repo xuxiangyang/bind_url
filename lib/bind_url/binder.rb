@@ -37,7 +37,7 @@ module BindUrl
       self.class.oss_bucket.put_object(
         File.join(store_dir, filename),
         file: file.path,
-        content_type: Rack::Mime::MIME_TYPES[extname] || MimeMagic.by_magic(file).type,
+        content_type: Rack::Mime::MIME_TYPES[extname] || MimeMagic.by_magic(file)&.type || "application/octet-stream",
         acl: self.private ? "private" : "default",
       )
       filename
