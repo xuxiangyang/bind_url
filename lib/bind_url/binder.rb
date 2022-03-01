@@ -34,16 +34,10 @@ module BindUrl
     def upload_via_file(file)
       extname = Pathname.new(file.path).extname
       filename = "#{SecureRandom.uuid.delete('-')}#{extname}"
-      content_type = Rack::Mime::MIME_TYPES[extname]
-      if content_type.nil?
-        mm = MimeMagic.by_magic(file)
-        content_type = mm.type if mm
-      end
-
       self.class.oss_bucket.put_object(
         File.join(store_dir, filename),
         file: file.path,
-        content_type: content_type || "application/octet-stream",
+        content_type: Rack::Mime::MIME_TYPES[extname] || MimeMagic.by_magic(file)&.type || "application/octet-stream",
         acl: self.private ? "private" : "default",
       )
       filename
